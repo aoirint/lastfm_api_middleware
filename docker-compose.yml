@@ -9,6 +9,6 @@ services:
       LASTFM_API_KEY: ${LASTFM_API_KEY}
       DUMP_PATH: ${DUMP_PATH}
     volumes:
-      - './data:/data'
+      - "${HOST_DATA_DIR}:/data"
     ports:
-      - '127.0.0.1:8000:8000'
+      - "${HOST_PORT}:8000"
