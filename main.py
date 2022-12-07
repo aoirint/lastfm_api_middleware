@@ -20,8 +20,8 @@ recenttracks_last_fetched: Optional[datetime] = None
 recenttracks_interval = timedelta(seconds=60)
 
 
-@app.get('/recenttracks')
-def recenttracks():
+@app.get('/v1/recenttracks')
+def v1_recenttracks():
   global recenttracks_last_fetched
 
   now = datetime.now(tz=timezone.utc)
