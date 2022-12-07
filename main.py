@@ -3,6 +3,7 @@ from pathlib import Path
 from typing import Optional
 from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 
 from lastfm_api_middleware import lastfm_api
@@ -11,10 +12,18 @@ from lastfm_api_middleware import lastfm_api
 LASTFM_USER = os.environ['LASTFM_USER']
 LASTFM_API_KEY = os.environ['LASTFM_API_KEY']
 DUMP_PATH = Path(os.environ['DUMP_PATH'])
+CORS_ALLOW_ORIGINS = os.environ['CORS_ALLOW_ORIGINS'].split(',')
 
 USERAGENT = 'aoirint_lastfm_api_middleware/0.0.0'
 
 app = FastAPI()
+app.add_middleware(
+  CORSMiddleware,
+  allow_origins=CORS_ALLOW_ORIGINS,
+  allow_credentials=True,
+  allow_methods=['*'],
+  allow_headers=['*'],
+)
 
 recenttracks_last_fetched: Optional[datetime] = None
 recenttracks_interval = timedelta(seconds=60)

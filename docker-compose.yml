@@ -8,6 +8,7 @@ services:
       LASTFM_USER: ${LASTFM_USER}
       LASTFM_API_KEY: ${LASTFM_API_KEY}
       DUMP_PATH: ${DUMP_PATH}
+      CORS_ALLOW_ORIGINS: ${CORS_ALLOW_ORIGINS}
     volumes:
       - "${HOST_DATA_DIR}:/data"
     ports:
