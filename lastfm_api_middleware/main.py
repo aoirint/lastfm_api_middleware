@@ -1,33 +1,37 @@
 import os
-import requests
 from pathlib import Path
+from typing import Optional
+from datetime import datetime, timedelta, timezone
+from fastapi import FastAPI
+from fastapi.responses import FileResponse
 
-LAST_FM_USER = os.environ['LAST_FM_USER']
-LAST_FM_API_KEY = os.environ['LAST_FM_API_KEY']
+from lastfm_api_middleware.lastfm_api import dump_recenttracks
+
+LASTFM_USER = os.environ['LASTFM_USER']
+LASTFM_API_KEY = os.environ['LASTFM_API_KEY']
 DUMP_PATH = Path(os.environ['DUMP_PATH'])
 
 USERAGENT = 'aoirint_lastfm_api_middleware/0.0.0'
 
-def main():
-  api_url = 'https://ws.audioscrobbler.com/2.0/'
+app = FastAPI()
 
-  params = {
-    'method': 'user.getrecenttracks',
-    'user': LAST_FM_USER,
-    'api_key': LAST_FM_API_KEY,
-    'format': 'json',
-  }
+recenttracks_last_fetched: Optional[datetime] = None
+recenttracks_interval = timedelta(seconds=60)
 
-  headers = {
-    'User-Agent': USERAGENT,
-  }
+@app.get('/recenttracks')
+def recenttracks():
+  global recenttracks_last_fetched
 
-  res = requests.get(api_url, params=params, headers=headers)
-  res.raise_for_status()
+  now = datetime.now(tz=timezone.utc)
+  if recenttracks_last_fetched is None or recenttracks_interval <= now - recenttracks_last_fetched:
+    recenttracks_last_fetched_string = recenttracks_last_fetched.isoformat() if recenttracks_last_fetched is not None else 'None'
+    print(f'[{now.isoformat()}] Fetch recenttracks (last_fetched_at: {recenttracks_last_fetched_string})')
+    dump_recenttracks(
+      lastfm_user=LASTFM_USER,
+      lastfm_api_key=LASTFM_API_KEY,
+      useragent=USERAGENT,
+      dump_path=DUMP_PATH,
+    )
+    recenttracks_last_fetched = now
 
-  DUMP_PATH.parent.mkdir(parents=True, exist_ok=True)
-  DUMP_PATH.write_text(res.text, encoding='utf-8')
-
-
-if __name__ == '__main__':
-  main()
+  return FileResponse(DUMP_PATH)

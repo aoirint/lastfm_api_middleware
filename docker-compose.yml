@@ -1,0 +1,14 @@
+version: '3.8'
+services:
+  app:
+    image: aoirint/lastfm_api_middleware
+    build: .
+    restart: always
+    environment:
+      LASTFM_USER: ${LASTFM_USER}
+      LASTFM_API_KEY: ${LASTFM_API_KEY}
+      DUMP_PATH: ${DUMP_PATH}
+    volumes:
+      - './data:/data'
+    ports:
+      - '127.0.0.1:8000:8000'
