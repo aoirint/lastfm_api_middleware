@@ -16,6 +16,7 @@ ADD requirements.txt /requirements.txt
 RUN pip3 install -r requirements.txt
 
 WORKDIR /opt/lastfm_api_middleware
-ADD ./lastfm_api_middleware /opt/lastfm_api_middleware
+ADD ./lastfm_api_middleware /opt/lastfm_api_middleware/lastfm_api_middleware
+ADD ./main.py /opt/lastfm_api_middleware/
 
 CMD [ "gosu", "user", "uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000" ]

@@ -5,7 +5,8 @@ from datetime import datetime, timedelta, timezone
 from fastapi import FastAPI
 from fastapi.responses import FileResponse
 
-from lastfm_api_middleware.lastfm_api import dump_recenttracks
+from lastfm_api_middleware import lastfm_api
+
 
 LASTFM_USER = os.environ['LASTFM_USER']
 LASTFM_API_KEY = os.environ['LASTFM_API_KEY']
@@ -18,6 +19,7 @@ app = FastAPI()
 recenttracks_last_fetched: Optional[datetime] = None
 recenttracks_interval = timedelta(seconds=60)
 
+
 @app.get('/recenttracks')
 def recenttracks():
   global recenttracks_last_fetched
@@ -26,7 +28,8 @@ def recenttracks():
   if recenttracks_last_fetched is None or recenttracks_interval <= now - recenttracks_last_fetched:
     recenttracks_last_fetched_string = recenttracks_last_fetched.isoformat() if recenttracks_last_fetched is not None else 'None'
     print(f'[{now.isoformat()}] Fetch recenttracks (last_fetched_at: {recenttracks_last_fetched_string})')
-    dump_recenttracks(
+
+    lastfm_api.dump_recenttracks(
       lastfm_user=LASTFM_USER,
       lastfm_api_key=LASTFM_API_KEY,
       useragent=USERAGENT,
