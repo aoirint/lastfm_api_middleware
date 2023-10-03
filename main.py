@@ -43,7 +43,8 @@ def v1_recenttracks():
             else "None"
         )
         print(
-            f"[{now.isoformat()}] Fetch recenttracks (last_fetched_at: {recenttracks_last_fetched_string})"
+            f"[{now.isoformat()}] Fetch recenttracks "
+            f"(last_fetched_at: {recenttracks_last_fetched_string})"
         )
 
         lastfm_api.dump_recenttracks(
