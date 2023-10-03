@@ -8,7 +8,7 @@ def dump_recenttracks(
     lastfm_api_key: str,
     useragent: str,
     dump_path: Path,
-):
+) -> None:
     api_url = "https://ws.audioscrobbler.com/2.0/"
 
     params = {
