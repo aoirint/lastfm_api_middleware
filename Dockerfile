@@ -44,7 +44,7 @@ RUN <<EOF
 EOF
 
 WORKDIR /opt/lastfm_api_middleware
-ADD --chown=2000:2000 ./pyproject.toml ./poetry.lock ./README.md /opt/lastfm_api_middleware/
+ADD --chown=2000:2000 ./pyproject.toml ./poetry.lock /opt/lastfm_api_middleware/
 RUN --mount=type=cache,uid=2000,gid=2000,target=/home/user/.cache/pypoetry/cache \
     --mount=type=cache,uid=2000,gid=2000,target=/home/user/.cache/pypoetry/artifacts <<EOF
     set -eu
@@ -53,7 +53,7 @@ RUN --mount=type=cache,uid=2000,gid=2000,target=/home/user/.cache/pypoetry/cache
 EOF
 
 ADD --chown=2000:2000 ./lastfm_api_middleware /opt/lastfm_api_middleware/lastfm_api_middleware
-ADD --chown=2000:2000 ./main.py /opt/lastfm_api_middleware/
+ADD --chown=2000:2000 ./README.md ./main.py /opt/lastfm_api_middleware/
 RUN --mount=type=cache,uid=2000,gid=2000,target=/home/user/.cache/pypoetry/cache \
     --mount=type=cache,uid=2000,gid=2000,target=/home/user/.cache/pypoetry/artifacts <<EOF
     set -eu
