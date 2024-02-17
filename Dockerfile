@@ -4,7 +4,7 @@ FROM python:3.11
 ARG DEBIAN_FRONTEND=noninteractive
 ARG PIP_NO_CACHE_DIR=1
 ENV PYTHONUNBUFFERED=1
-ENV PATH=/code/lastfm_api_middleware/.venv/bin:/home/user/.local/bin:${PATH}
+ENV PATH=/opt/lastfm_api_middleware/.venv/bin:/home/user/.local/bin:${PATH}
 
 RUN <<EOF
     set -eu
@@ -54,8 +54,8 @@ EOF
 
 ADD --chown=2000:2000 ./lastfm_api_middleware /opt/lastfm_api_middleware/lastfm_api_middleware
 ADD --chown=2000:2000 ./main.py /opt/lastfm_api_middleware/
-RUN --mount=type=cache,uid=1000,gid=1000,target=/home/user/.cache/pypoetry/cache \
-    --mount=type=cache,uid=1000,gid=1000,target=/home/user/.cache/pypoetry/artifacts <<EOF
+RUN --mount=type=cache,uid=2000,gid=2000,target=/home/user/.cache/pypoetry/cache \
+    --mount=type=cache,uid=2000,gid=2000,target=/home/user/.cache/pypoetry/artifacts <<EOF
     set -eu
 
     gosu user poetry install --only main
